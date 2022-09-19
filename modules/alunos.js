@@ -700,7 +700,7 @@ const getAlunosByCurso = function (sigla) {
     alunos.forEach(item => {
         item.curso.forEach(curso => {
             if(curso.sigla.toUpperCase() == sigla.toUpperCase()) {
-                arrayAlunos.push({nome : item.nome, foto: item.foto, matricula : item.matricula, status : item.status, conclusao : curso.conclusao})
+                arrayAlunos.push({nome : item.nome, foto: item.foto, matricula : item.matricula, status : item.status, conclusao : curso.conclusao, curso: curso.nome})
                 error = false
             }
         })
