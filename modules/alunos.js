@@ -706,7 +706,7 @@ const getAlunosByCurso = function (sigla) {
         })
     })
 
-    jsonAlunos.stats = arrayAlunos
+    jsonAlunos.status = arrayAlunos
     if(error)
         return false
     else
@@ -739,7 +739,19 @@ const getAlunosByMatricula = function (matricula) {
         return alunoSelecionadoJson
     }
 }
+
+const filtroStatus = function (sigla, status) {
+    const alunosCurso = getAlunosByCurso(sigla)
+    const alunosJson = {}
+    if(!status || status == 'default') {
+        return alunosCurso
+    }
+    else {
+        alunosJson.status = alunosCurso.status.filter(conclusao => conclusao.status.toUpperCase() == status.toUpperCase())
+        return alunosJson
+    }
+}
 module.exports = {
-    getAlunosByCurso,
-    getAlunosByMatricula
+    filtroStatus,
+    getAlunosByMatricula,
 }

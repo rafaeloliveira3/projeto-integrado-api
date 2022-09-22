@@ -10,7 +10,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 
 const { getCurso } = require('./modules/cursos')
-const { getAlunosByCurso, getAlunosByMatricula } = require('./modules/alunos')
+const { getAlunosByMatricula, filtroStatus } = require('./modules/alunos')
 
 const app = express()
 
@@ -38,9 +38,10 @@ app.get('/cursos', cors(), async function(request, response, next) {
 })
 
 // EndPoint 2 - Obter todos os alunos de um determinado Curso
-app.get('/alunos/:sigla', cors(), async function(request, response, next) {
+app.get('/alunos/:sigla/', cors(), async function(request, response, next) {
     let curso = request.params.sigla
-    let alunos = getAlunosByCurso(curso)
+    let status = request.query.status
+    let alunos = filtroStatus(curso, status)
 
     if(alunos) {
         response.status(200)
@@ -51,10 +52,9 @@ app.get('/alunos/:sigla', cors(), async function(request, response, next) {
         response.json('{message : "Nenhum item encontrado"}')
     }
 })
-
 // EndPoint 3 - Obter os status de determinado aluno
-app.get('/aluno/', cors(), async function( request, response, next) {
-    let matricula = request.query.matricula
+app.get('/aluno/:matricula', cors(), async function( request, response, next) {
+    let matricula = request.params.matricula
     let aluno = getAlunosByMatricula(matricula)
 
     if(aluno) {
