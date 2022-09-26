@@ -10,9 +10,10 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 
 const { getCurso } = require('./modules/cursos')
-const { getAlunosByMatricula, filtroStatus } = require('./modules/alunos')
+const { getAlunosByMatricula, filtroAno } = require('./modules/alunos')
 
 const app = express()
+const router = express.Router()
 
 app.use((request, response, next) => {
     response.header('Access-Control-Allow-Origin', '*')
@@ -24,7 +25,7 @@ app.use((request, response, next) => {
 })
 
 // EndPoint 1 - Obter todos os cursos disponíveis
-app.get('/cursos', cors(), async function(request, response, next) {
+router.get('/cursos', function(request, response, next) {
     let cursos = getCurso()
 
     if(cursos) {
@@ -38,10 +39,12 @@ app.get('/cursos', cors(), async function(request, response, next) {
 })
 
 // EndPoint 2 - Obter todos os alunos de um determinado Curso
-app.get('/alunos/:sigla/', cors(), async function(request, response, next) {
+router.get('/alunos/:sigla/', function(request, response, next) {
     let curso = request.params.sigla
     let status = request.query.status
-    let alunos = filtroStatus(curso, status)
+    let ano = request.query.ano
+
+    let alunos = filtroAno(curso, status, ano)
 
     if(alunos) {
         response.status(200)
@@ -53,7 +56,7 @@ app.get('/alunos/:sigla/', cors(), async function(request, response, next) {
     }
 })
 // EndPoint 3 - Obter os status de determinado aluno
-app.get('/aluno/:matricula', cors(), async function( request, response, next) {
+router.get('/aluno/:matricula', function( request, response, next) {
     let matricula = request.params.matricula
     let aluno = getAlunosByMatricula(matricula)
 
@@ -67,6 +70,6 @@ app.get('/aluno/:matricula', cors(), async function( request, response, next) {
     }
 })
 
-app.listen(8080, function() {
-    console.log('Servidor aguardando requisições')
-})
+app.use('/.netlify/functions/api', router)
+
+module.exports = app

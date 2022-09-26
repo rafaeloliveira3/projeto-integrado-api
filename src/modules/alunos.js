@@ -747,11 +747,23 @@ const filtroStatus = function (sigla, status) {
         return alunosCurso
     }
     else {
-        alunosJson.status = alunosCurso.status.filter(conclusao => conclusao.status.toUpperCase() == status.toUpperCase())
+        alunosJson.status = alunosCurso.status.filter(alunos => alunos.status.toUpperCase() == status.toUpperCase())
         return alunosJson
     }
 }
+const filtroAno = function (sigla, status, ano) {
+    const alunosCurso = filtroStatus(sigla, status)
+    const alunosJson = {}
+    if(!ano || ano == 'default') {
+        return alunosCurso
+    }
+    else {
+        alunosJson.status = alunosCurso.status.filter(alunos => alunos.conclusao.toUpperCase() == ano.toUpperCase())
+        return alunosJson
+    }
+}
+
 module.exports = {
-    filtroStatus,
-    getAlunosByMatricula,
+    filtroAno,
+    getAlunosByMatricula
 }
