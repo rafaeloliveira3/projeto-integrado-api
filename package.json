@@ -8,6 +8,6 @@
   },
   "scripts": {
     "start": "netlify-lambda serve ./src",
-    "build": "etlify-lambda build ./src"
+    "build": "netlify-lambda build ./src"
   }
 }
